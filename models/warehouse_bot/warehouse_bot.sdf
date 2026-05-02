@@ -1,0 +1,131 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="warehouse_bot">
+    <pose>0 0 0 0 0 0</pose>
+    <static>false</static>
+
+    <!-- Base -->
+    <link name="base_link">
+      <inertial>
+        <mass>8.0</mass>
+        <inertia>
+          <ixx>0.20</ixx><iyy>0.20</iyy><izz>0.30</izz>
+          <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+        </inertia>
+      </inertial>
+
+      <collision name="base_col">
+        <geometry><box><size>0.45 0.30 0.12</size></box></geometry>
+      </collision>
+      <visual name="base_vis">
+        <geometry><box><size>0.45 0.30 0.12</size></box></geometry>
+      </visual>
+
+      <!-- Simple 2D lidar -->
+      <sensor name="lidar" type="ray">
+        <pose>0.18 0 0.10 0 0 0</pose>
+        <update_rate>10</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>360</samples>
+              <min_angle>-3.14159</min_angle>
+              <max_angle>3.14159</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.12</min>
+            <max>10.0</max>
+          </range>
+        </ray>
+        <visualize>false</visualize>
+        <plugin name="gazebo_ros_ray_sensor" filename="libgazebo_ros_ray_sensor.so">
+          <ros>
+            <namespace>/</namespace>
+            <remapping>~/out:=scan</remapping>
+          </ros>
+          <frame_name>base_link</frame_name>
+        </plugin>
+      </sensor>
+    </link>
+
+    <!-- Left wheel -->
+    <link name="wheel_left">
+      <pose>0 0.18 0.06 0 1.5708 0</pose>
+      <inertial>
+        <mass>0.6</mass>
+        <inertia>
+          <ixx>0.001</ixx><iyy>0.001</iyy><izz>0.001</izz>
+          <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="col">
+        <geometry><cylinder><radius>0.06</radius><length>0.02</length></cylinder></geometry>
+      </collision>
+      <visual name="vis">
+        <geometry><cylinder><radius>0.06</radius><length>0.02</length></cylinder></geometry>
+      </visual>
+    </link>
+
+    <!-- Right wheel -->
+    <link name="wheel_right">
+      <pose>0 -0.18 0.06 0 1.5708 0</pose>
+      <inertial>
+        <mass>0.6</mass>
+        <inertia>
+          <ixx>0.001</ixx><iyy>0.001</iyy><izz>0.001</izz>
+          <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="col">
+        <geometry><cylinder><radius>0.06</radius><length>0.02</length></cylinder></geometry>
+      </collision>
+      <visual name="vis">
+        <geometry><cylinder><radius>0.06</radius><length>0.02</length></cylinder></geometry>
+      </visual>
+    </link>
+
+    <!-- Wheel joints -->
+    <joint name="joint_left" type="revolute">
+      <parent>base_link</parent>
+      <child>wheel_left</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit><lower>-1e16</lower><upper>1e16</upper></limit>
+      </axis>
+    </joint>
+
+    <joint name="joint_right" type="revolute">
+      <parent>base_link</parent>
+      <child>wheel_right</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit><lower>-1e16</lower><upper>1e16</upper></limit>
+      </axis>
+    </joint>
+
+    <!-- Differential drive plugin (ROS2) -->
+    <plugin name="gazebo_ros_diff_drive" filename="libgazebo_ros_diff_drive.so">
+      <ros>
+        <namespace>/</namespace>
+      </ros>
+
+      <left_joint>joint_left</left_joint>
+      <right_joint>joint_right</right_joint>
+
+      <wheel_separation>0.36</wheel_separation>
+      <wheel_diameter>0.12</wheel_diameter>
+
+      <cmd_vel_topic>cmd_vel</cmd_vel_topic>
+      <odom_topic>odom</odom_topic>
+      <publish_odom>true</publish_odom>
+      <publish_tf>true</publish_tf>
+
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_link</robot_base_frame>
+
+      <max_wheel_torque>5</max_wheel_torque>
+      <update_rate>30</update_rate>
+    </plugin>
+  </model>
+</sdf>

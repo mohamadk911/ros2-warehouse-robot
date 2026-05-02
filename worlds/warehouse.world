@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="warehouse_minimal">
+
+    <gui fullscreen="0">
+        <camera name="user_camera">
+            <pose>-18 -10 4 0 0.6 0</pose>
+            <view_controller>orbit</view_controller>
+            <projection_type>perspective</projection_type>
+
+            <track_visual>
+                <name>tb3</name>
+                <static>false</static>
+                <use_model_frame>true</use_model_frame>
+                <inherit_yaw>false</inherit_yaw>
+                <xyz>-3 0 2</xyz>
+                <min_dist>1</min_dist>
+                <max_dist>8</max_dist>
+            </track_visual>
+        </camera>
+    </gui>
+
+    <!-- Light + physics -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Floor (optional visual reference) -->
+    <model name="floor_mark">
+      <static>true</static>
+      <link name="link">
+        <collision name="col">
+          <geometry>
+            <box><size>40 25 0.05</size></box>
+          </geometry>
+        </collision>
+        <visual name="vis">
+          <geometry>
+            <box><size>40 25 0.05</size></box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0.025 0 0 0</pose>
+      </link>
+    </model>
+
+    <!-- Walls (closed warehouse box) -->
+    <!-- North wall -->
+    <model name="wall_n">
+      <static>true</static>
+      <link name="link">
+        <collision name="col"><geometry><box><size>40 0.4 2.5</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>40 0.4 2.5</size></box></geometry></visual>
+        <pose>0 12.5 1.25 0 0 0</pose>
+      </link>
+    </model>
+
+    <!-- South wall -->
+    <model name="wall_s">
+      <static>true</static>
+      <link name="link">
+        <collision name="col"><geometry><box><size>40 0.4 2.5</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>40 0.4 2.5</size></box></geometry></visual>
+        <pose>0 -12.5 1.25 0 0 0</pose>
+      </link>
+    </model>
+
+    <!-- East wall -->
+    <model name="wall_e">
+      <static>true</static>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.4 25 2.5</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.4 25 2.5</size></box></geometry></visual>
+        <pose>20 0 1.25 0 0 0</pose>
+      </link>
+    </model>
+
+    <!-- West wall -->
+    <model name="wall_w">
+      <static>true</static>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.4 25 2.5</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.4 25 2.5</size></box></geometry></visual>
+        <pose>-20 0 1.25 0 0 0</pose>
+      </link>
+    </model>
+
+    <!-- Shelves: simple long boxes forming aisles -->
+    <model name="shelf_row_1">
+      <static>true</static>
+      <link name="link">
+        <collision name="col"><geometry><box><size>30 0.8 1.5</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>30 0.8 1.5</size></box></geometry></visual>
+        <pose>0 6 0.75 0 0 0</pose>
+      </link>
+    </model>
+
+    <model name="shelf_row_2">
+      <static>true</static>
+      <link name="link">
+        <collision name="col"><geometry><box><size>30 0.8 1.5</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>30 0.8 1.5</size></box></geometry></visual>
+        <pose>0 0 0.75 0 0 0</pose>
+      </link>
+    </model>
+
+    <model name="shelf_row_3">
+      <static>true</static>
+      <link name="link">
+        <collision name="col"><geometry><box><size>30 0.8 1.5</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>30 0.8 1.5</size></box></geometry></visual>
+        <pose>0 -6 0.75 0 0 0</pose>
+      </link>
+    </model>
+
+    <!-- Open “loading zone” marker (no collision, only visual) -->
+    <model name="loading_zone">
+      <static>true</static>
+      <link name="link">
+        <visual name="vis">
+          <geometry><box><size>4 4 0.02</size></box></geometry>
+          <material>
+            <ambient>0.1 0.8 0.1 1</ambient>
+            <diffuse>0.1 0.8 0.1 1</diffuse>
+          </material>
+        </visual>
+        <pose>-16 -10 0.02 0 0 0</pose>
+      </link>
+    </model>
+
+  </world>
+</sdf>
